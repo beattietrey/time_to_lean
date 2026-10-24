@@ -14,8 +14,6 @@ class HomePage extends StatelessWidget {
   }
 }
 
-List taskTime = [];
-
 class TaskRecall extends StatefulWidget {
   const TaskRecall({super.key});
 
@@ -28,6 +26,7 @@ class _TaskRecallState extends State<TaskRecall> {
 
   final _timeController = TextEditingController();
   final _timeValueController = TextEditingController();
+  bool _selectedValue = false;
 
   @override
   void dispose() {
@@ -46,8 +45,6 @@ class _TaskRecallState extends State<TaskRecall> {
       // etc
     }
   }
-
-  int? _selectedValue = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -75,47 +72,46 @@ class _TaskRecallState extends State<TaskRecall> {
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Row(
-                children: [
-                  Text(
-                    "Prioritize Task Type?",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Column(
-                    children: [
-                      RadioGroup<int>(
-                        groupValue: _selectedValue,
-                        onChanged: (int? value) {
-                          setState(() {
-                            _selectedValue = value;
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            const ListTile(
-                              title: Text('Yes'),
-                              leading: Radio(value: 2),
-                            ),
-                            const ListTile(
-                              title: Text('No'),
-                              leading: Radio(value: 1),
-                            ),
-                          ],
+            SizedBox(
+              height: 100,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: RadioGroup(
+                  groupValue: _selectedValue,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _selectedValue = value!;
+                    });
+                  },
+                  child: SizedBox(
+                    height: 30,
+                    child: Column(
+                      children: [
+                        Text('Prioritize specific task type?'),
+                        Expanded(
+                          child: const ListTile(
+                            title: Text('No'),
+                            leading: Radio(value: false),
+                          ),
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: const ListTile(
+                            title: Text('Yes'),
+                            leading: Radio(value: true),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 10),
-                  // if(_selectedValue == 2) [
-                  //   //dropdown for task types
-                  // ],
-                ],
+                ),
               ),
             ),
 
-            // Add Radio Button for yes/no
+            if (_selectedValue)
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: const Text('This worked'),
+              ),
             // Add Task Types as Dropdown, only show if yes
             Padding(
               padding: const .symmetric(vertical: 16.0),
